@@ -1,0 +1,48 @@
+name: Surveillance de produits
+
+on:
+  schedule:
+    # Toutes les 15 minutes. Modifiez le "*/15" pour changer l'intervalle
+    # (ex: "*/30" pour 30 min, "0 * * * *" pour 1 fois par heure).
+    - cron: "*/15 * * * *"
+  workflow_dispatch: {} # permet de lancer manuellement depuis l'onglet Actions
+
+# Empêche deux exécutions de tourner en même temps (évite les conflits
+# lors de la sauvegarde de l'état des produits déjà vus).
+concurrency:
+  group: surveillance
+  cancel-in-progress: false
+
+jobs:
+  verifier:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Récupérer le dépôt
+        uses: actions/checkout@v4
+
+      - name: Installer Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Installer les dépendances
+        run: |
+          pip install requests beautifulsoup4 lxml playwright
+
+      - name: Installer le navigateur Chromium (pour les sites JavaScript)
+        run: python -m playwright install --with-deps chromium
+
+      - name: Lancer la vérification
+        env:
+          GMAIL_EXPEDITEUR: ${{ secrets.GMAIL_EXPEDITEUR }}
+          GMAIL_MDP_APPLICATION: ${{ secrets.GMAIL_MDP_APPLICATION }}
+          GMAIL_DESTINATAIRE: ${{ secrets.GMAIL_DESTINATAIRE }}
+        run: python surveillance_cli.py
+
+      - name: Sauvegarder l'état des produits déjà vus
+        run: |
+          git config user.name "surveillance-bot"
+          git config user.email "surveillance-bot@users.noreply.github.com"
+          git add etat_liens/
+          git diff --quiet --cached || git commit -m "Mise à jour de l'état des produits [skip ci]"
+          git push

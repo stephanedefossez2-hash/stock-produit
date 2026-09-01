@@ -1,0 +1,31 @@
+{
+  "liens": [
+    {
+      "id": "dresseur_elite",
+      "nom": "Coffret Dresseur d'Elite - leslibraires.fr",
+      "url": "https://www.leslibraires.fr/recherche/neuf/?q=coffret+dresseur+d%27%C3%A9lite",
+      "selecteur_css": "article.card-product",
+      "nb_pages": 1,
+      "url_pagine": "",
+      "moteur_rendu": "rapide"
+    },
+    {
+      "id": "kingdultes_pokemon",
+      "nom": "TCG Pokemon - kingdultes.com",
+      "url": "https://www.kingdultes.com/collections/tcg-pokemon",
+      "selecteur_css": "product-card",
+      "nb_pages": 1,
+      "url_pagine": "",
+      "moteur_rendu": "navigateur"
+    },
+    {
+      "id": "strikegames_pokemon",
+      "nom": "TCG Pokemon FR - strikegames.shop",
+      "url": "https://strikegames.shop/collections/tcg-pokemon-produit-en-francais",
+      "selecteur_css": "li.grid__item",
+      "nb_pages": 1,
+      "url_pagine": "",
+      "moteur_rendu": "rapide"
+    }
+  ]
+}
